@@ -26,7 +26,11 @@
       >
       <div class="uploader-file-progress" :class="progressingClass" :style="progressStyle"></div>
       <div class="uploader-file-info">
-        <div class="uploader-file-name"><i class="uploader-file-icon" :icon="fileCategory"></i>{{file.name}}</div>
+        <div class="uploader-file-name">
+          <i class="uploader-file-icon" :icon="fileCategory"></i>
+          <span v-if="!showInput" @click="changeFileName">{{file.name}}</span>
+          <input v-else v-model="file.name" autofocus="autofocus" type="text" @blur="showInput=false">
+        </div>
         <div class="uploader-file-size">{{formatedSize}}</div>
         <div class="uploader-file-meta"></div>
         <div class="uploader-file-status">
@@ -71,6 +75,7 @@
     },
     data () {
       return {
+        showInput: false,
         response: null,
         paused: false,
         error: false,
@@ -177,6 +182,9 @@
       }
     },
     methods: {
+      changeFileName () {
+        this.showInput = true
+      },
       _actionCheck () {
         this.paused = this.file.paused
         this.error = this.file.error
